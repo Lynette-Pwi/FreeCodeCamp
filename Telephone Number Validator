@@ -1,0 +1,17 @@
+function telephoneCheck(str) {
+  let regex1 = /^\d{3}\-\d{3}\-\d{4}$/
+  let regex2 = /^\(\d{3}\)\d{3}\-\d{4}$/
+  let regex3 = /^\(\d{3}\)\s\d{3}\-\d{4}$/
+  let regex4 = /^\d{3}\s\d{3}\s\d{4}$/
+  let regex5 = /^\d{10}/
+  let regex6 = /^1(\s)*(\d{3}|\(\d{3}\))(\s|\-)*\d{3}(\-|\s)\d{4}$/
+  
+  if (str.split(/\W/).join("").length === 10 && (str.match(regex1)||str.match(regex2)||str.match(regex3)||str.match(regex4)||str.match(regex5))) {
+    return true
+  }
+  else if (str.split(/\W/).join("").length === 11 && str.match(regex6)) {
+    return true
+  }
+  return false
+}
+console.log(telephoneCheck("(555)555-5555"));
