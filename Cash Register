@@ -1,0 +1,60 @@
+function checkCashRegister(price, cash, cid) {
+  var changeDue = cash-price;
+  //get the sum of cid
+  var cashBal = 0;
+  var changeReturn = [["PENNY", 0], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]];
+
+  for (let i in cid) {
+   cashBal = Math.round((cashBal + cid[i][1])*100)/100
+  }
+  if (changeDue>cashBal){
+    return {status: "INSUFFICIENT_FUNDS", change: []}
+  }
+  else if (changeDue === cashBal) {
+    return {status: "CLOSED", change: cid}
+  }
+
+  //insuff funds: if change-due < cashBal but no exact change
+  //open: if change-due < cashBal and have exact change
+  var denomination;
+  for (let i=8; i>=0; i--){
+    switch(i){
+      case 8: denomination = 100
+      break;
+      case 7: denomination = 20
+      break;
+      case 6: denomination = 10
+      break;
+      case 5: denomination = 5
+      break;
+      case 4: denomination = 1
+      break;
+      case 3: denomination = 0.25
+      break;
+      case 2: denomination = 0.1
+      break;
+      case 1: denomination = 0.05
+      break;
+      case 0: denomination = 0.01
+      break;
+    }
+    while (changeDue>=denomination && cid[i][1]>=denomination){
+      cid[i][1]=Math.round((cid[i][1] - denomination)*100)/100;
+      changeReturn[i][1]=Math.round((changeReturn[i][1] + denomination)*100)/100;
+      changeDue=Math.round((changeDue - denomination)*100)/100;
+    }
+    if (changeReturn[i][1]===0){
+      changeReturn.splice(i,1)
+    }
+
+  }
+  if (changeDue>0){
+  return {status: "INSUFFICIENT_FUNDS", change: []}
+}
+else return {status: "OPEN", change: changeReturn.reverse()}
+
+
+
+}
+
+console.log(checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
